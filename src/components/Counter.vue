@@ -42,8 +42,3 @@ export default defineComponent({
   }
 }
 </style>
-
-function useState(initialState: any): [any, any] { throw new Error("Function not implemented."); } function
-useState(initialState: any): [any, any] { throw new Error("Function not implemented."); } function useState(arg0:
-number): [any, any] { throw new Error("Function not implemented."); } function useState(arg0: number): [any, any] {
-throw new Error("Function not implemented."); }

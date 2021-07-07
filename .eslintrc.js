@@ -1,16 +1,13 @@
 module.exports = {
-  extends: [
-    'plugin:vue/vue3-essential',
-    'eslint:recommended',
-    'prettier',
-  ],
-  plugins: [
-    "prettier"
-  ],
+  extends: ['plugin:vue/vue3-essential', 'eslint:recommended', 'prettier'],
+  plugins: ['prettier'],
+  parserOptions: {
+    parser: 'babel-eslint',
+    ecmaVersion: 6,
+  },
   overrides: [
     {
       files: ['**/*.ts', '**/*.tsx', '**/*.js'],
-      parser: '@typescript-eslint/parser',
       env: {
         browser: true,
         node: true,
