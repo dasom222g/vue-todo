@@ -1,7 +1,7 @@
 <template>
   <section>
     <div class="form">
-      <form action="/create" method="post" @submit.prevent="handleSubmit">
+      <form action="/create" method="post" @submit.prevent="$emit('addTodo', title)">
         <div class="form-wrap">
           <input type="text" class="form__element" name="title" v-model="title" />
           <button type="submit" class="form__button">Add</button>
@@ -15,6 +15,8 @@
 import { defineComponent, ref } from 'vue'
 export default defineComponent({
   name: 'TodoForm',
+  props: {},
+  emits: ['add-todo'],
   setup: () => {
     const title = ref('')
     const handleSubmit = (e: UIEvent): void => {
