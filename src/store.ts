@@ -13,10 +13,10 @@ export const store = createStore<State>({
   },
   mutations: {
     increasement(state: State) {
-      state.count++;
+      state.count++
     },
     decreasementFn(state: State) {
-      if (state.count > 0) state.count--;
+      if (state.count > 0) state.count--
     },
   },
   actions: {
