@@ -2,8 +2,8 @@ module.exports = {
   extends: ['plugin:vue/vue3-essential', 'eslint:recommended', 'prettier'],
   plugins: ['prettier'],
   parserOptions: {
-    parser: 'babel-eslint',
     ecmaVersion: 6,
+    parser: '@typescript-eslint/parser',
   },
   overrides: [
     {
