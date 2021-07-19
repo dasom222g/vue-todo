@@ -14,7 +14,6 @@
     <div className="todo__item-buttonarea">
       <router-link to="/update">
         <!-- <TiEdit /> -->
-        test
       </router-link>
       <button type="button" className="todo__item-button">
         <!-- <RiCloseCircleLine
