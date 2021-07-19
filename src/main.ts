@@ -7,7 +7,6 @@ import { worker } from './mocks/browser'
 import router from './router'
 
 if (process.env.NODE_ENV === 'development') {
-  console.log('worker', worker)
   worker.start()
 }
 
