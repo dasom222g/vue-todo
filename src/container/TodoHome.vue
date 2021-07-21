@@ -3,7 +3,7 @@
     <div class="todo">
       <header><h2 class="todo__title">What’s the Plan for Today?</h2></header>
       <TodoForm v-model:title="title" @addTodo="addTodo" />
-      <TodoList v-if="todos.length" :todos="todos.length ? todos : []" />
+      <TodoList v-if="todos" :todos="todos" />
     </div>
   </div>
 </template>
@@ -23,13 +23,13 @@ export default defineComponent({
     const title = ref('')
     let todos = ref<TodoDataIDType[]>([])
     let todo: TodoDataType
-    const addTodo = (): void => {
+    const addTodo = async (): Promise<void> => {
       todo = {
         title: title.value.trim(),
         isComplete: false,
       }
       title.value = ''
-      postTodo()
+      await postTodo()
       fetchTodos()
     }
     const fetchTodos = async (): Promise<void> => {
