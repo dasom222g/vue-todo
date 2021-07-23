@@ -24,6 +24,7 @@ export default defineComponent({
     let todos = ref<TodoDataIDType[]>([])
     let todo: TodoDataType
     const addTodo = async (): Promise<void> => {
+      // todo: store에 있는 데이터에서 중복된 값 있는지 확인 후 실행할 것
       todo = {
         title: title.value.trim(),
         isComplete: false,
