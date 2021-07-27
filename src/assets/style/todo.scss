@@ -38,8 +38,8 @@
         background-color: $gray-100;
         overflow: hidden;
         &.complete {
-          background-color: $gray-700;
-          color: #fff;
+          background-color: #fff;
+          color: $gray-700;
           display: none;
         }
       }

@@ -3,12 +3,13 @@
     <div class="todo__content">
       <div class="todo__item-check">
         <label>
-          <input type="checkbox" :checked="true" />
-          <i className="todo__item-check-icon"></i>
-          <!-- <GoCheck className="todo__item-check-icon complete" />
-          <span className="todo__content-text">{todo.title}</span> -->
+          <input type="checkbox" :checked="false" />
+          <i class="todo__item-check-icon"></i>
+          <font-awesome-icon icon="check-square" class="todo__item-check-icon complete" />
+          <!-- <font-awesome-icon :icon="['fas', 'heart']" /> -->
+          <span className="todo__content-text">{{ todo.title }}</span>
         </label>
-        {{ todo.title }}
+        <!-- {{ todo.title }} -->
       </div>
     </div>
     <div className="todo__item-buttonarea">
