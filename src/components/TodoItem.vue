@@ -3,14 +3,12 @@
     <div class="todo__content">
       <div class="todo__item-check">
         <label>
-          <input type="checkbox" :checked="false" />
-          <!-- <i class="todo__item-check-icon"></i> -->
+          <input type="checkbox" :checked="todo.isComplete" />
           <font-awesome-icon icon="square" class="todo__item-check-icon" />
           <font-awesome-icon icon="check-square" class="todo__item-check-icon complete" />
           <!-- <font-awesome-icon :icon="['fas', 'heart']" /> -->
           <span className="todo__content-text">{{ todo.title }}</span>
         </label>
-        <!-- {{ todo.title }} -->
       </div>
     </div>
     <div className="todo__item-buttonarea">
