@@ -1,6 +1,6 @@
 <template>
   <li class="todo__item">
-    <div class="todo__content">
+    <div :class="{ complete: todo.isComplete }" class="todo__content">
       <div class="todo__item-check">
         <label>
           <input type="checkbox" :checked="todo.isComplete" />
