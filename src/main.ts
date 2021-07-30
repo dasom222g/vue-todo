@@ -10,9 +10,9 @@ const app = createApp(App)
 
 // fontawesome
 import { library } from '@fortawesome/fontawesome-svg-core'
-import { faUserSecret, faSquare, faCheckSquare, faHeart as fasHeart } from '@fortawesome/free-solid-svg-icons'
+import { faUserSecret, faSquare, faCheckSquare, faEdit, faTrashAlt } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
-library.add(faUserSecret, faSquare, faCheckSquare, fasHeart)
+library.add(faUserSecret, faSquare, faCheckSquare, faEdit, faTrashAlt)
 app.component('font-awesome-icon', FontAwesomeIcon)
 
 if (process.env.NODE_ENV === 'development') {

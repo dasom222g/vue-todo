@@ -7,19 +7,17 @@
           <font-awesome-icon icon="square" class="todo__item-check-icon" />
           <font-awesome-icon icon="check-square" class="todo__item-check-icon complete" />
           <!-- <font-awesome-icon :icon="['fas', 'heart']" /> -->
-          <span className="todo__content-text">{{ todo.title }}</span>
+          <span class="todo__content-text">{{ todo.title }}</span>
         </label>
       </div>
-    </div>
-    <div className="todo__item-buttonarea">
-      <router-link to="/update">
-        <!-- <TiEdit /> -->
-      </router-link>
-      <button type="button" className="todo__item-button">
-        <!-- <RiCloseCircleLine
-          className="todo__item-button-icon delete"
-        /> -->
-      </button>
+      <div class="todo__item-buttonarea">
+        <router-link to="/update" class="todo__item-button">
+          <font-awesome-icon icon="edit" />
+        </router-link>
+        <button type="button" class="todo__item-button">
+          <font-awesome-icon icon="trash-alt" />
+        </button>
+      </div>
     </div>
   </li>
 </template>
