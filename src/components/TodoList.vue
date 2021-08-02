@@ -1,7 +1,7 @@
 <template>
   <section>
     <ul class="todo__list">
-      <TodoItem v-for="(todo, index) in todos" :key="`todo_${index}`" :todo="todo" />
+      <TodoItem v-for="(todo, index) in todos" :key="`todo_${index}`" :todo="todo" @removeTodo="removeTodo" />
     </ul>
   </section>
 </template>
@@ -19,8 +19,11 @@ export default defineComponent({
       required: true,
     },
   },
-  setup: () => {
-    // return {}
+  setup(props, { emit }) {
+    const removeTodo = (id: number) => {
+      emit('remove-todo', id)
+    }
+    return { removeTodo }
   },
 })
 </script>

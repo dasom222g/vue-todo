@@ -14,7 +14,7 @@
         <router-link to="/update" class="todo__item-button">
           <font-awesome-icon icon="edit" />
         </router-link>
-        <button type="button" class="todo__item-button">
+        <button type="button" class="todo__item-button" @click="removeTodo(todo.id)">
           <font-awesome-icon icon="trash-alt" />
         </button>
       </div>
@@ -33,8 +33,11 @@ export default defineComponent({
       required: true,
     },
   },
-  setup: () => {
-    // return {}
+  setup(props, { emit }) {
+    const removeTodo = (id: number) => {
+      emit('remove-todo', id)
+    }
+    return { removeTodo }
   },
 })
 </script>
