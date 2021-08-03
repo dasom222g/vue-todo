@@ -11,6 +11,22 @@ export interface TodoDataIDType {
   isComplete?: boolean
 }
 
+// state
+export type ByIDType = {
+  [key: string]: TodoDataIDType
+}
+
+export type NormalType = {
+  allIds: string[]
+  byId: ByIDType
+}
+
+export interface StateType {
+  isLoading: boolean
+  payload: NormalType | null
+  error: Error | null
+}
+
 export const header = {
   headers: {
     'Content-Type': 'application/json',

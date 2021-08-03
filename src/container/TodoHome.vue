@@ -57,7 +57,7 @@ export default defineComponent({
     }
 
     const removeTodo = (id: number) => {
-      console.log('dsdf', id)
+      console.log('removeTodo', id)
     }
     // lifeCycle
     onBeforeMount(() => {
