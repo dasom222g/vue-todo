@@ -24,12 +24,12 @@
 
 <script lang="ts">
 import { defineComponent, PropType } from 'vue'
-import { TodoDataType } from '../type/type.interface'
+import { TodoDataIDType } from '../type/type.interface'
 export default defineComponent({
   name: 'TodoItem',
   props: {
     todo: {
-      type: Object as PropType<TodoDataType>,
+      type: Object as PropType<TodoDataIDType>,
       required: true,
     },
   },
