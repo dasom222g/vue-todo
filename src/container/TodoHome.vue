@@ -9,12 +9,12 @@
 </template>
 
 <script lang="ts">
-import { computed, ComputedRef, defineComponent, onBeforeMount, ref } from 'vue'
+import { computed, defineComponent, onBeforeMount, ref } from 'vue'
 import { useStore } from 'vuex'
 import TodoForm from '../components/TodoForm.vue'
 import TodoList from '../components/TodoList.vue'
-import { key } from '../store'
-import { TodoDataType, TodoDataIDType, StateType } from '../type/type.interface'
+import { ActionName, key } from '../store'
+import { TodoDataType, TodoDataIDType } from '../type/type.interface'
 export default defineComponent({
   components: {
     TodoForm,
@@ -23,9 +23,9 @@ export default defineComponent({
   name: 'TodoHome',
   setup() {
     const store = useStore(key)
-    const fetchTodos = () => store.dispatch('fetchTodos')
+    const fetchTodos = () => store.dispatch(ActionName.FETCH_TODOS)
     // let todos = ref<TodoDataIDType[]>([])
-    const todos: ComputedRef<StateType> = computed(() => store.state.todos)
+    const todos = computed(() => store.getters.todos)
 
     const title = ref('')
     let todo: TodoDataType
@@ -56,8 +56,9 @@ export default defineComponent({
       console.log('removeTodo', id)
     }
     // lifeCycle
-    onBeforeMount(() => {
-      fetchTodos()
+    onBeforeMount(async () => {
+      await fetchTodos()
+      console.log('todos', todos.value)
     })
     return { addTodo, removeTodo, title, todos }
   },
