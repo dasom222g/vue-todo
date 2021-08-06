@@ -1,15 +1,31 @@
 import { InjectionKey } from 'vue'
-import { ActionContext, ActionTree, createStore, GetterTree, MutationTree, Store } from 'vuex'
-import { ByIDType, header, NormalType, TodoDataIDType } from './type/type.interface'
+import {
+  ActionTree,
+  CommitOptions,
+  createStore,
+  DispatchOptions,
+  GetterTree,
+  MutationTree,
+  Store as VuexStore,
+} from 'vuex'
+import {
+  ActionName,
+  ActionType,
+  AugmentedActionContext,
+  ByIDType,
+  GettersType,
+  header,
+  MutationName,
+  MutationType,
+  NormalType,
+  State,
+  TodoDataIDType,
+} from './type/type.interface'
 import { StateType } from './type/type.interface'
 
-export const key: InjectionKey<Store<State>> = Symbol()
+export const key: InjectionKey<VuexStore<State>> = Symbol()
 
 // declare state (상태 선언)
-export interface State {
-  count: number
-  todos: StateType
-}
 
 const initialState: StateType = {
   isLoading: false,
@@ -21,12 +37,6 @@ const initialState: StateType = {
 //   allIds: [],
 //   byId: {},
 // }
-
-// set state
-const state = {
-  count: 0,
-  todos: initialState,
-}
 
 // set NoramalType (state 변경)
 const setTodos = (todos: TodoDataIDType[]): NormalType | null => {
@@ -43,28 +53,9 @@ const setTodos = (todos: TodoDataIDType[]): NormalType | null => {
   } else return null
 }
 
-// mutations and action enums (type이름 정의)
-
-export enum MutationName {
-  // GET_TODOS = 'GET_TODOS',
-  // eslint-disable-next-line no-unused-vars
-  GET_TODOS_SUCCESS = 'GET_TODOS_SUCCESS',
-  // eslint-disable-next-line no-unused-vars
-  GET_TODOS_ERROR = 'GET_TODOS_ERROR',
-}
-
-export enum ActionName {
-  // GET_TODOS = 'GET_TODOS',
-  // eslint-disable-next-line no-unused-vars
-  FETCH_TODOS = 'FETCH_TODOS',
-}
-
-// mutations
-export type MutationType<S = State> = {
-  // eslint-disable-next-line no-unused-vars
-  [MutationName.GET_TODOS_SUCCESS](state: S, payload: TodoDataIDType[]): void
-  // eslint-disable-next-line no-unused-vars
-  [MutationName.GET_TODOS_ERROR](state: S, error: Error): void
+const state = {
+  count: 0,
+  todos: initialState,
 }
 
 const mutations: MutationTree<State> & MutationType = {
@@ -86,19 +77,8 @@ const mutations: MutationTree<State> & MutationType = {
   },
 }
 
-// actions
-type AugmentedActionContext = {
-  // eslint-disable-next-line no-unused-vars
-  commit<K extends keyof MutationType>(key: K, payload: Parameters<MutationType[K]>[1]): ReturnType<MutationType[K]>
-} & Omit<ActionContext<State, State>, 'commit'>
-
-export interface ActionType {
-  // eslint-disable-next-line no-unused-vars
-  [ActionName.FETCH_TODOS]({ commit }: AugmentedActionContext, payload: TodoDataIDType[], error: Error): Promise<void>
-}
-
 const actions: ActionTree<State, State> & ActionType = {
-  async [ActionName.FETCH_TODOS]({ commit }) {
+  async [ActionName.FETCH_TODOS]({ commit }: AugmentedActionContext) {
     try {
       const data = await fetch('/api/todos', header)
       const result = await data.json()
@@ -109,20 +89,40 @@ const actions: ActionTree<State, State> & ActionType = {
   },
 }
 
-// getters
-export type GettersType = {
-  // eslint-disable-next-line no-unused-vars
-  todos(state: State): StateType
-}
-
 const getters: GetterTree<State, State> = {
   todos: (state) => state.todos,
+}
+
+// store
+export type Store = Omit<VuexStore<State>, 'getters' | 'commit' | 'dispatch'> & {
+  commit<K extends keyof MutationType, P extends Parameters<MutationType[K]>[1]>(
+    // eslint-disable-next-line no-unused-vars
+    key: K,
+    // eslint-disable-next-line no-unused-vars
+    payload: P,
+    // eslint-disable-next-line no-unused-vars
+    options?: CommitOptions
+  ): ReturnType<MutationType[K]>
+} & {
+  dispatch<K extends keyof ActionType>(
+    // eslint-disable-next-line no-unused-vars
+    key: K,
+    // eslint-disable-next-line no-unused-vars
+    payload?: Parameters<ActionType[K]>[1],
+    // eslint-disable-next-line no-unused-vars
+    options?: DispatchOptions
+  ): ReturnType<ActionType[K]>
+} & {
+  getters: {
+    [K in keyof GettersType]: ReturnType<GettersType[K]>
+  }
 }
 
 export const store = createStore<State>({
   state,
   getters,
   mutations,
+  actions,
   // mutations: {
   //   increasement(state: State) {
   //     state.count++
@@ -131,7 +131,6 @@ export const store = createStore<State>({
   //     if (state.count > 0) state.count--
   //   },
   // },
-  actions,
   // actions: {
   //   increasement(context) {
   //     context.commit('increasement')
@@ -141,3 +140,7 @@ export const store = createStore<State>({
   //   },
   // },
 })
+
+export function useStore() {
+  return store as Store
+}

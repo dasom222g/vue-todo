@@ -10,11 +10,10 @@
 
 <script lang="ts">
 import { computed, defineComponent, onBeforeMount, ref } from 'vue'
-import { useStore } from 'vuex'
 import TodoForm from '../components/TodoForm.vue'
 import TodoList from '../components/TodoList.vue'
-import { ActionName, key } from '../store'
-import { TodoDataType, TodoDataIDType } from '../type/type.interface'
+import { useStore } from '../store'
+import { TodoDataType, TodoDataIDType, ActionName } from '../type/type.interface'
 export default defineComponent({
   components: {
     TodoForm,
@@ -22,10 +21,9 @@ export default defineComponent({
   },
   name: 'TodoHome',
   setup() {
-    const store = useStore(key)
-    const fetchTodos = () => store.dispatch(ActionName.FETCH_TODOS)
-    // let todos = ref<TodoDataIDType[]>([])
+    const store = useStore()
     const todos = computed(() => store.getters.todos)
+    const fetchTodos = () => store.dispatch(ActionName.FETCH_TODOS)
 
     const title = ref('')
     let todo: TodoDataType

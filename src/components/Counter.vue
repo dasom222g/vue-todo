@@ -19,7 +19,7 @@ export default defineComponent({
       required: true,
     },
   },
-  setup() {
+  setup: () => {
     const store = useStore(key)
     const increasement = () => store.dispatch('increasement') //액션값을 디스패치함
     const decreasement = () => store.dispatch('decreasement')
