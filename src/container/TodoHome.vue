@@ -13,7 +13,7 @@ import { computed, defineComponent, onBeforeMount, ref } from 'vue'
 import TodoForm from '../components/TodoForm.vue'
 import TodoList from '../components/TodoList.vue'
 import { useStore } from '../store'
-import { TodoDataType, TodoDataIDType, ActionName } from '../type/type.interface'
+import { ActionName } from '../type/type.interface'
 export default defineComponent({
   components: {
     TodoForm,
@@ -26,32 +26,15 @@ export default defineComponent({
     const fetchTodos = () => store.dispatch(ActionName.FETCH_TODOS)
 
     const title = ref('')
-    let todo: TodoDataType
-    const addTodo = async (): Promise<void> => {
+    const addTodo = async (text: string): Promise<void> => {
       // todo: store에 있는 데이터에서 중복된 값 있는지 확인 후 실행할 것
-      todo = {
-        title: title.value.trim(),
-        isComplete: false,
-      }
-      title.value = ''
-      await postTodo()
-    }
-
-    const postTodo = async (): Promise<void> => {
-      try {
-        const response = await fetch('/api/todos', {
-          method: 'POST',
-          body: JSON.stringify(todo),
-        })
-        const result: TodoDataIDType = await response.json()
-        console.log('postResult', result)
-      } catch (error) {
-        console.log(error)
-      }
+      store.dispatch(ActionName.POST_TODO, text)
+      const sameArr = todos.value.payload
+      console.log('sameArr', sameArr)
     }
 
     const removeTodo = (id: number) => {
-      console.log('removeTodo', id)
+      store.dispatch(ActionName.DELETE_TODO, id)
     }
     // lifeCycle
     onBeforeMount(async () => {

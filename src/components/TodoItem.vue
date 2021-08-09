@@ -1,9 +1,9 @@
 <template>
   <li class="todo__item">
-    <div :class="{ complete: todo.isComplete }" class="todo__content">
+    <div :class="{ complete: !!todo.isComplete }" class="todo__content">
       <div class="todo__item-check">
         <label>
-          <input type="checkbox" :checked="todo.isComplete" />
+          <input type="checkbox" :checked="!!todo.isComplete" />
           <font-awesome-icon icon="square" class="todo__item-check-icon" />
           <font-awesome-icon icon="check-square" class="todo__item-check-icon complete" />
           <!-- <font-awesome-icon :icon="['fas', 'heart']" /> -->

@@ -29,12 +29,21 @@ export default defineComponent({
       required: true,
     },
   },
-  emits: ['update:title', 'add-todo'],
+  emits: {
+    'add-todo': (message: string) => {
+      if (message.length > 0) return true
+      else return false
+    },
+    'update:title': (value: string) => {
+      if (value !== null) return true
+    },
+  },
+  // emits: ['update:title', 'add-todo'],
   setup(props, { emit }) {
     const myinput = ref<HTMLInputElement | null>(null)
     const message = computed({
-      get: () => props.title,
-      set: (value) => emit('update:title', value),
+      get: (): string => props.title,
+      set: (value: string) => emit('update:title', value),
     })
     const handleSubmit = () => {
       if (/^\s*$/.test(props.title)) {
@@ -43,7 +52,8 @@ export default defineComponent({
         focusInput()
         return
       }
-      emit('add-todo')
+      emit('add-todo', message.value)
+      message.value = ''
       focusInput()
     }
 

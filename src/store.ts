@@ -33,6 +33,15 @@ const initialState: StateType = {
   error: null,
 }
 
+const errorState = (error: Error): StateType => {
+  const state: StateType = {
+    isLoading: false,
+    payload: null,
+    error,
+  }
+  return state
+}
+
 // const initialnormalState: NormalType = {
 //   allIds: [],
 //   byId: {},
@@ -52,6 +61,37 @@ const setTodos = (todos: TodoDataIDType[]): NormalType | null => {
     }
   } else return null
 }
+const setTodo = (payload: NormalType, todo: TodoDataIDType): NormalType => {
+  const { allIds, byId } = payload
+  const id = todo.id.toString()
+  return {
+    ...payload,
+    allIds: [...allIds, id],
+    byId: {
+      ...byId,
+      [id]: todo,
+    },
+  }
+}
+
+const updateTodo = ({ allIds, byId }: NormalType, todo: TodoDataIDType, todoId: number): NormalType => {
+  const id = todoId.toString()
+  byId[id] = todo
+  return {
+    allIds,
+    byId,
+  }
+}
+
+const removeTodo = ({ allIds, byId }: NormalType, todoId: number): NormalType => {
+  const id = todoId.toString()
+  allIds = allIds.filter((item) => item !== id)
+  delete byId[id]
+  return {
+    allIds,
+    byId,
+  }
+}
 
 const state = {
   count: 0,
@@ -68,23 +108,86 @@ const mutations: MutationTree<State> & MutationType = {
     }
   },
   [MutationName.GET_TODOS_ERROR](state: State, error: Error) {
+    state.todos = errorState(error)
+  },
+  [MutationName.ADD_TODO_SUCCESS](state: State, payload: TodoDataIDType) {
     state.todos = {
       ...state.todos,
       isLoading: false,
-      payload: null,
-      error,
+      payload: state.todos.payload && setTodo(state.todos.payload, payload),
+      error: null,
     }
+  },
+  [MutationName.ADD_TODO_ERROR](state: State, error: Error) {
+    state.todos = errorState(error)
+  },
+  [MutationName.UPDATE_TODO_SUCCESS](state: State, payload: TodoDataIDType) {
+    state.todos = {
+      ...state.todos,
+      isLoading: false,
+      payload: state.todos.payload && updateTodo(state.todos.payload, payload, payload.id),
+      error: null,
+    }
+  },
+  [MutationName.UPDATE_TODO_ERROR](state: State, error: Error) {
+    state.todos = errorState(error)
+  },
+  [MutationName.DELETE_TODO_SUCCESS](state: State, id: number) {
+    state.todos = {
+      ...state.todos,
+      isLoading: false,
+      payload: state.todos.payload && removeTodo(state.todos.payload, id),
+      error: null,
+    }
+  },
+  [MutationName.DELETE_TODO_ERROR](state: State, error: Error) {
+    state.todos = errorState(error)
   },
 }
 
 const actions: ActionTree<State, State> & ActionType = {
-  async [ActionName.FETCH_TODOS]({ commit }: AugmentedActionContext) {
+  async [ActionName.FETCH_TODOS]({ commit }: AugmentedActionContext): Promise<void> {
     try {
       const data = await fetch('/api/todos', header)
       const result = await data.json()
       commit(MutationName.GET_TODOS_SUCCESS, result)
     } catch (error) {
       commit(MutationName.GET_TODOS_ERROR, error)
+    }
+  },
+  async [ActionName.POST_TODO]({ commit }: AugmentedActionContext, title: string): Promise<void> {
+    try {
+      const response = await fetch('/api/todos', {
+        method: 'POST',
+        body: JSON.stringify({ title }),
+      })
+      const result: TodoDataIDType = await response.json()
+      commit(MutationName.ADD_TODO_SUCCESS, result)
+    } catch (error) {
+      commit(MutationName.ADD_TODO_ERROR, error)
+    }
+  },
+  async [ActionName.PUT_TODO]({ commit }: AugmentedActionContext, changeItem: TodoDataIDType): Promise<void> {
+    const id = changeItem.id
+    try {
+      const response = await fetch(`/api/todos/${id}`, {
+        method: 'PUT',
+        body: JSON.stringify({ changeItem }),
+      })
+      const result: TodoDataIDType = await response.json()
+      commit(MutationName.UPDATE_TODO_SUCCESS, result)
+    } catch (error) {
+      commit(MutationName.UPDATE_TODO_ERROR, error)
+    }
+  },
+  async [ActionName.DELETE_TODO]({ commit }: AugmentedActionContext, id: number): Promise<void> {
+    try {
+      await fetch(`/api/todos/${id}`, {
+        method: 'DELETE',
+      })
+      commit(MutationName.DELETE_TODO_SUCCESS, id)
+    } catch (error) {
+      commit(MutationName.DELETE_TODO_ERROR, error)
     }
   },
 }
