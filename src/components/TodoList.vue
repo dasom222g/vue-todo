@@ -1,7 +1,7 @@
 <template>
   <section>
     <ul class="todo__list">
-      <TodoItem v-for="todo in todos.byId" :key="todo.id" :todo="todo" @removeTodo="removeTodo" />
+      <TodoItem v-for="id in todos.allIds" :key="id" :todo="todos.byId[id]" @removeTodo="removeTodo" />
     </ul>
   </section>
 </template>

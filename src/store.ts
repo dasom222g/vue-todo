@@ -33,6 +33,11 @@ const initialState: StateType = {
   error: null,
 }
 
+const dataInitial: NormalType = {
+  allIds: [],
+  byId: {},
+}
+
 const errorState = (error: Error): StateType => {
   const state: StateType = {
     isLoading: false,
@@ -48,30 +53,29 @@ const errorState = (error: Error): StateType => {
 // }
 
 // set NoramalType (state 변경)
-const setTodos = (todos: TodoDataIDType[]): NormalType | null => {
+const setTodos = (todos: TodoDataIDType[] | null): NormalType => {
   if (todos) {
-    const allIds = todos.map((item) => item.id.toString())
-    const byId = todos.reduce((acc: ByIDType, current: TodoDataIDType) => {
-      if (current.id) acc[current.id] = current
-      return acc
-    }, {})
+    const allIds = todos.map((item: TodoDataIDType) => item.id.toString())
+    const byId = todos.reduce(
+      (acc: ByIDType, current: TodoDataIDType): ByIDType => ({ ...acc, [current.id]: current }),
+      {}
+    )
     return {
       allIds,
       byId,
     }
-  } else return null
+  } else return dataInitial
 }
-const setTodo = (payload: NormalType, todo: TodoDataIDType): NormalType => {
-  const { allIds, byId } = payload
+const setTodo = ({ allIds, byId }: NormalType, todo: TodoDataIDType): NormalType => {
   const id = todo.id.toString()
-  return {
-    ...payload,
+  const result = {
     allIds: [...allIds, id],
     byId: {
       ...byId,
       [id]: todo,
     },
   }
+  return result
 }
 
 const updateTodo = ({ allIds, byId }: NormalType, todo: TodoDataIDType, todoId: number): NormalType => {

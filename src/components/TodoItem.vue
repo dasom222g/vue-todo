@@ -11,7 +11,7 @@
         </label>
       </div>
       <div class="todo__item-buttonarea">
-        <router-link to="/update" class="todo__item-button">
+        <router-link :to="`/update/${todo.id}`" class="todo__item-button">
           <font-awesome-icon icon="edit" />
         </router-link>
         <button type="button" class="todo__item-button" @click="removeTodo(todo.id)">

@@ -27,10 +27,11 @@ export default defineComponent({
 
     const title = ref('')
     const addTodo = async (text: string): Promise<void> => {
-      // todo: store에 있는 데이터에서 중복된 값 있는지 확인 후 실행할 것
+      const sameArr =
+        todos.value.payload &&
+        todos.value.payload.allIds.filter((id: string) => todos.value.payload?.byId[id].title === text)
+      if (sameArr && sameArr.length) return
       store.dispatch(ActionName.POST_TODO, text)
-      const sameArr = todos.value.payload
-      console.log('sameArr', sameArr)
     }
 
     const removeTodo = (id: number) => {
