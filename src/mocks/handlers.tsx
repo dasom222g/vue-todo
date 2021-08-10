@@ -22,9 +22,8 @@ export const handlers = [
     if (typeof req.body !== 'string') return res(ctx.status(422), ctx.body('Error, not string'))
 
     const store = localStorage.getItem(KEY)
-    const lastNum = store && JSON.parse(store)[JSON.parse(store).length -1].id
     const newItem = typeof req.body === 'string' && {
-      id: Math.floor(lastNum ? lastNum + 1 :Math.random() * 99999),
+      id: Math.floor(Math.random() * 99999),
       ...JSON.parse(req.body),
     }
 
