@@ -1,14 +1,20 @@
 <template>
   <section>
     <ul class="todo__list">
-      <TodoItem v-for="id in todos.allIds" :key="id" :todo="todos.byId[id]" @removeTodo="removeTodo" />
+      <TodoItem
+        v-for="id in todos.allIds"
+        :key="id"
+        :todo="todos.byId[id]"
+        @completeTodo="$emit('complete-todo', $event, $event)"
+        @removeTodo="removeTodo"
+      />
     </ul>
   </section>
 </template>
 
 <script lang="ts">
 import { defineComponent, PropType } from 'vue'
-import { NormalType } from '../type/type.interface'
+import { NormalType, TodoDataIDType } from '../type/type.interface'
 import TodoItem from './TodoItem.vue'
 export default defineComponent({
   components: {
@@ -21,8 +27,15 @@ export default defineComponent({
       required: true,
     },
   },
+  emits: {
+    'complete-todo': (id: number, changeItem: TodoDataIDType) => {
+      if (id !== null || changeItem !== null) return true
+    },
+    'remove-todo': (id: number) => {
+      if (id !== null) return true
+    },
+  },
   setup(props, { emit }) {
-    // const { allIds, byId } = toRefs(props.todos)
     const removeTodo = (id: number) => {
       emit('remove-todo', id)
     }

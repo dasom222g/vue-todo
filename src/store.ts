@@ -2,6 +2,7 @@ import { InjectionKey } from 'vue'
 import {
   ActionTree,
   CommitOptions,
+  createLogger,
   createStore,
   DispatchOptions,
   GetterTree,
@@ -176,7 +177,7 @@ const actions: ActionTree<State, State> & ActionType = {
     try {
       const response = await fetch(`/api/todos/${id}`, {
         method: 'PUT',
-        body: JSON.stringify({ changeItem }),
+        body: JSON.stringify(changeItem),
       })
       const result: TodoDataIDType = await response.json()
       commit(MutationName.UPDATE_TODO_SUCCESS, result)
@@ -230,6 +231,7 @@ export const store = createStore<State>({
   getters,
   mutations,
   actions,
+  plugins: [createLogger()],
   // mutations: {
   //   increasement(state: State) {
   //     state.count++

@@ -3,7 +3,7 @@
     <div :class="{ complete: !!todo.isComplete }" class="todo__content">
       <div class="todo__item-check">
         <label>
-          <input type="checkbox" :checked="!!todo.isComplete" />
+          <input type="checkbox" :checked="!!todo.isComplete" @change="completeTodo(todo)" />
           <font-awesome-icon icon="square" class="todo__item-check-icon" />
           <font-awesome-icon icon="check-square" class="todo__item-check-icon complete" />
           <!-- <font-awesome-icon :icon="['fas', 'heart']" /> -->
@@ -33,11 +33,27 @@ export default defineComponent({
       required: true,
     },
   },
+  emits: {
+    'complete-todo': <T>(item: T) => {
+      if (item !== null) return true
+    },
+    'remove-todo': (id: number) => {
+      if (id !== null) return true
+    },
+  },
   setup(props, { emit }) {
+    const completeTodo = (todo: TodoDataIDType) => {
+      const { id } = todo
+      const changeItem = {
+        ...todo,
+        isComplete: !todo.isComplete,
+      }
+      emit('complete-todo', { id, changeItem })
+    }
     const removeTodo = (id: number) => {
       emit('remove-todo', id)
     }
-    return { removeTodo }
+    return { completeTodo, removeTodo }
   },
 })
 </script>
