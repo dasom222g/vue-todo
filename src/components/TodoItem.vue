@@ -43,12 +43,11 @@ export default defineComponent({
   },
   setup(props, { emit }) {
     const completeTodo = (todo: TodoDataIDType) => {
-      const { id } = todo
       const changeItem = {
         ...todo,
         isComplete: !todo.isComplete,
       }
-      emit('complete-todo', { id, changeItem })
+      emit('complete-todo', changeItem)
     }
     const removeTodo = (id: number) => {
       emit('remove-todo', id)

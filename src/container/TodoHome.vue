@@ -34,8 +34,7 @@ export default defineComponent({
       store.dispatch(ActionName.POST_TODO, text)
     }
 
-    const completeTodo = ({ id, changeItem }: { id: number; changeItem: TodoDataIDType }): void => {
-      console.log('id', id)
+    const completeTodo = (changeItem: TodoDataIDType): void => {
       store.dispatch(ActionName.PUT_TODO, changeItem)
     }
 

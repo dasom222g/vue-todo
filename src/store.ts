@@ -31,6 +31,7 @@ export const key: InjectionKey<VuexStore<State>> = Symbol()
 const initialState: StateType = {
   isLoading: false,
   payload: null,
+  selectedItem: null,
   error: null,
 }
 
@@ -43,6 +44,7 @@ const errorState = (error: Error): StateType => {
   const state: StateType = {
     isLoading: false,
     payload: null,
+    selectedItem: null,
     error,
   }
   return state
@@ -106,21 +108,29 @@ const state = {
 const mutations: MutationTree<State> & MutationType = {
   [MutationName.GET_TODOS_SUCCESS](state: State, payload: TodoDataIDType[]) {
     state.todos = {
-      ...state.todos,
+      ...initialState,
       isLoading: false,
       payload: setTodos(payload),
+      selectedItem: null,
       error: null,
     }
   },
   [MutationName.GET_TODOS_ERROR](state: State, error: Error) {
     state.todos = errorState(error)
   },
-  [MutationName.ADD_TODO_SUCCESS](state: State, payload: TodoDataIDType) {
+  [MutationName.GET_TODO_SUCCESS](state: State, payload: TodoDataIDType) {
     state.todos = {
       ...state.todos,
-      isLoading: false,
+      selectedItem: payload,
+    }
+  },
+  [MutationName.GET_TODO_ERROR](state: State, error: Error) {
+    state.todos = errorState(error)
+  },
+  [MutationName.ADD_TODO_SUCCESS](state: State, payload: TodoDataIDType) {
+    state.todos = {
+      ...initialState,
       payload: state.todos.payload && setTodo(state.todos.payload, payload),
-      error: null,
     }
   },
   [MutationName.ADD_TODO_ERROR](state: State, error: Error) {
@@ -128,10 +138,8 @@ const mutations: MutationTree<State> & MutationType = {
   },
   [MutationName.UPDATE_TODO_SUCCESS](state: State, payload: TodoDataIDType) {
     state.todos = {
-      ...state.todos,
-      isLoading: false,
+      ...initialState,
       payload: state.todos.payload && updateTodo(state.todos.payload, payload, payload.id),
-      error: null,
     }
   },
   [MutationName.UPDATE_TODO_ERROR](state: State, error: Error) {
@@ -139,10 +147,8 @@ const mutations: MutationTree<State> & MutationType = {
   },
   [MutationName.DELETE_TODO_SUCCESS](state: State, id: number) {
     state.todos = {
-      ...state.todos,
-      isLoading: false,
+      ...initialState,
       payload: state.todos.payload && removeTodo(state.todos.payload, id),
-      error: null,
     }
   },
   [MutationName.DELETE_TODO_ERROR](state: State, error: Error) {
@@ -156,6 +162,15 @@ const actions: ActionTree<State, State> & ActionType = {
       const data = await fetch('/api/todos', header)
       const result = await data.json()
       commit(MutationName.GET_TODOS_SUCCESS, result)
+    } catch (error) {
+      commit(MutationName.GET_TODOS_ERROR, error)
+    }
+  },
+  async [ActionName.FETCH_TODO]({ commit }: AugmentedActionContext, id: string): Promise<void> {
+    try {
+      const data = await fetch(`/api/todos/${id}`, header)
+      const result = await data.json()
+      commit(MutationName.GET_TODO_SUCCESS, result)
     } catch (error) {
       commit(MutationName.GET_TODOS_ERROR, error)
     }

@@ -5,7 +5,7 @@
         v-for="id in todos.allIds"
         :key="id"
         :todo="todos.byId[id]"
-        @completeTodo="$emit('complete-todo', $event, $event)"
+        @completeTodo="$emit('complete-todo', $event)"
         @removeTodo="removeTodo"
       />
     </ul>

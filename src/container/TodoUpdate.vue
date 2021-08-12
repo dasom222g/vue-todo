@@ -1,0 +1,36 @@
+<template>
+  <div class="content-wrapper">
+    <div class="todo">
+      <header><h2 class="todo__title">What’s the Plan for Today?</h2></header>
+      <TodoForm v-if="title" v-model:title="title" />
+      todo: {{ todo }}
+    </div>
+  </div>
+</template>
+
+<script lang="ts">
+import { computed, defineComponent, onBeforeMount } from 'vue'
+import { useRoute } from 'vue-router'
+import TodoForm from '../components/TodoForm.vue'
+import { useStore } from '../store'
+import { ActionName } from '../type/type.interface'
+export default defineComponent({
+  components: {
+    TodoForm,
+  },
+  name: 'TodoUpdate',
+  setup() {
+    const store = useStore()
+    const route = useRoute()
+    const todo = computed(() => store.getters.todos.selectedItem)
+
+    const title = computed(() => todo.value && todo.value.title)
+    // lifeCycle
+    onBeforeMount(() => {
+      const id = Array.isArray(route.params.id) ? '' : route.params.id
+      store.dispatch(ActionName.FETCH_TODO, id)
+    })
+    return { title, todo }
+  },
+})
+</script>

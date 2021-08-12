@@ -1,5 +1,6 @@
 import { createWebHistory, createRouter } from 'vue-router'
 import TodoHome from './container/TodoHome.vue'
+import TodoUpdate from './container/TodoUpdate.vue'
 import Counter from './components/Counter.vue'
 import NotFound from './container/NotFound.vue'
 
@@ -12,6 +13,11 @@ const routes = [
     path: '/',
     name: 'TodoHome',
     component: TodoHome,
+  },
+  {
+    path: '/update/:id',
+    name: 'TodoUpdate',
+    component: TodoUpdate,
   },
   {
     path: '/counter',
