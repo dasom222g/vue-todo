@@ -1,32 +1,37 @@
 <template>
   <section>
     <div class="form">
-      <form action="/create" method="post" @submit.prevent="handleSubmit">
+      <form
+        :action="`${item ? '/updae' : '/creatte'}`"
+        :method="`${item ? 'put' : 'post'}`"
+        @submit.prevent="handleSubmit"
+      >
         <div class="form-wrap">
           <input ref="myinput" type="text" class="form__element" name="title" v-model="message" />
-          <!-- <input
-            ref="myinput"
-            type="text"
-            class="form__element"
-            name="title"
-            :value="message"
-            @input="$emit('update:title', $event.target.value)"
-          /> -->
-          <button ref="btn" type="submit" class="form__button">Add</button>
+          <button v-if="!item" ref="btn" type="submit" class="form__button">Add</button>
         </div>
+        <TodoDetailForm v-if="item" :description="item.description ? item.description : ''" />
       </form>
     </div>
   </section>
 </template>
 
 <script lang="ts">
-import { defineComponent, nextTick, onMounted, ref, computed } from 'vue'
+import { defineComponent, nextTick, onMounted, ref, PropType, watch } from 'vue'
+import { TodoDataIDType } from '../type/type.interface'
+import TodoDetailForm from './TodoDetailForm.vue'
 export default defineComponent({
+  components: { TodoDetailForm },
   name: 'TodoForm',
   props: {
     title: {
       type: String,
       required: true,
+    },
+    item: {
+      type: Object as PropType<TodoDataIDType> | null,
+      required: false,
+      default: null,
     },
   },
   emits: {
@@ -41,9 +46,13 @@ export default defineComponent({
   // emits: ['update:title', 'add-todo'],
   setup(props, { emit }) {
     const myinput = ref<HTMLInputElement | null>(null)
-    const message = computed({
-      get: (): string => props.title,
-      set: (value: string) => emit('update:title', value),
+    // const message = computed({
+    //   get: (): string => props.title,
+    //   set: (value: string) => emit('update:title', value),
+    // })
+    const message = ref(props.title)
+    watch(message, (current: string) => {
+      emit('update:title', current)
     })
     const handleSubmit = () => {
       if (/^\s*$/.test(props.title)) {
