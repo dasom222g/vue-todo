@@ -2,36 +2,32 @@
   <section>
     <div class="form">
       <form
-        :action="`${item ? '/updae' : '/creatte'}`"
-        :method="`${item ? 'put' : 'post'}`"
+        :action="`${!isAdd ? '/updae' : '/creatte'}`"
+        :method="`${!isAdd ? 'put' : 'post'}`"
         @submit.prevent="handleSubmit"
       >
         <div class="form-wrap">
           <input ref="myinput" type="text" class="form__element" name="title" v-model="message" />
-          <button v-if="!item" ref="btn" type="submit" class="form__button">Add</button>
+          <button v-if="isAdd" ref="btn" type="submit" class="form__button">Add</button>
         </div>
-        <TodoDetailForm v-if="item" :description="item.description ? item.description : ''" />
       </form>
     </div>
   </section>
 </template>
 
 <script lang="ts">
-import { defineComponent, nextTick, onMounted, ref, PropType, watch } from 'vue'
-import { TodoDataIDType } from '../type/type.interface'
-import TodoDetailForm from './TodoDetailForm.vue'
+import { defineComponent, nextTick, onMounted, ref, computed } from 'vue'
 export default defineComponent({
-  components: { TodoDetailForm },
   name: 'TodoForm',
   props: {
     title: {
       type: String,
       required: true,
     },
-    item: {
-      type: Object as PropType<TodoDataIDType> | null,
+    isAdd: {
+      type: Boolean,
       required: false,
-      default: null,
+      default: true,
     },
   },
   emits: {
@@ -46,15 +42,12 @@ export default defineComponent({
   // emits: ['update:title', 'add-todo'],
   setup(props, { emit }) {
     const myinput = ref<HTMLInputElement | null>(null)
-    // const message = computed({
-    //   get: (): string => props.title,
-    //   set: (value: string) => emit('update:title', value),
-    // })
-    const message = ref(props.title)
-    watch(message, (current: string) => {
-      emit('update:title', current)
+    const message = computed({
+      get: (): string => props.title,
+      set: (value: string) => emit('update:title', value),
     })
     const handleSubmit = () => {
+      console.log(message)
       if (/^\s*$/.test(props.title)) {
         // 공백만 입력할 경우
         message.value = ''
