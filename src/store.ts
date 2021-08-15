@@ -138,7 +138,7 @@ const mutations: MutationTree<State> & MutationType = {
   },
   [MutationName.UPDATE_TODO_SUCCESS](state: State, payload: TodoDataIDType) {
     state.todos = {
-      ...initialState,
+      ...state.todos,
       payload: state.todos.payload && updateTodo(state.todos.payload, payload, payload.id),
     }
   },

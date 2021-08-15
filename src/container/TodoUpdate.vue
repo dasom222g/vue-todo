@@ -10,7 +10,7 @@
         />
       </template>
       <div class="button-area">
-        <button type="button" class="button-base button-base--cancel">Cancel</button>
+        <button type="button" class="button-base button-base--cancel" @click="goHome">Cancel</button>
         <button type="submit" class="button-base" @click="handleSubmit">Confirm</button>
       </div>
     </div>
@@ -19,7 +19,7 @@
 
 <script lang="ts">
 import { computed, defineComponent, onMounted, ref } from 'vue'
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import TodoDetailForm from '../components/TodoDetailForm.vue'
 import TodoForm from '../components/TodoForm.vue'
 import { useStore } from '../store'
@@ -33,19 +33,23 @@ export default defineComponent({
   setup() {
     const store = useStore()
     const route = useRoute()
+    const router = useRouter()
     const todo = computed(() => store.getters.todos.selectedItem)
     const fetchTodo = (id: string) => store.dispatch(ActionName.FETCH_TODO, id)
     const description = ref('')
 
+    const goHome = () => router.push({ name: 'TodoHome' })
+
     const handleSubmit = () => {
-      console.log('todo', todo.value)
+      if (todo.value) store.dispatch(ActionName.PUT_TODO, todo.value)
+      goHome()
     }
     // lifeCycle
     onMounted(() => {
       const id = Array.isArray(route.params.id) ? '' : route.params.id
       fetchTodo(id)
     })
-    return { todo, description, handleSubmit }
+    return { todo, description, handleSubmit, goHome }
   },
 })
 </script>
