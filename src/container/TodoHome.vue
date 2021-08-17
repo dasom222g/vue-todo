@@ -42,9 +42,9 @@ export default defineComponent({
       store.dispatch(ActionName.DELETE_TODO, id)
     }
     // lifeCycle
-    onBeforeMount(async () => {
-      await fetchTodos()
-      console.log('todos', todos.value)
+    onBeforeMount(() => {
+      if (todos.value.payload && todos.value.payload.allIds.length) return
+      fetchTodos()
     })
     return { addTodo, completeTodo, removeTodo, title, todos }
   },
