@@ -47,7 +47,7 @@ export default defineComponent({
       set: (value: string) => emit('update:title', value),
     })
     const handleSubmit = () => {
-      console.log(message)
+      if (!props.isAdd) return
       if (/^\s*$/.test(props.title)) {
         // 공백만 입력할 경우
         message.value = ''
