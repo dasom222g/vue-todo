@@ -29,9 +29,9 @@ export default defineComponent({
     const addTodo = (text: string): void => {
       const sameArr =
         todos.value.payload &&
-        todos.value.payload.allIds.filter((id: string) => todos.value.payload?.byId[id].title === text)
+        todos.value.payload.allIds.filter((id: string) => todos.value.payload?.byId[id].title === text.trim())
       if (sameArr && sameArr.length) return
-      store.dispatch(ActionName.POST_TODO, text)
+      store.dispatch(ActionName.POST_TODO, text.trim())
     }
 
     const completeTodo = (changeItem: TodoDataIDType): void => {

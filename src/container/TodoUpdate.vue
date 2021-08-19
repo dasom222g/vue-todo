@@ -18,7 +18,7 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, onMounted, ref } from 'vue'
+import { computed, defineComponent, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import TodoDetailForm from '../components/TodoDetailForm.vue'
 import TodoForm from '../components/TodoForm.vue'
@@ -36,12 +36,15 @@ export default defineComponent({
     const router = useRouter()
     const todo = computed(() => store.getters.todos.selectedItem)
     const fetchTodo = (id: string) => store.dispatch(ActionName.FETCH_TODO, id)
-    const description = ref('')
 
     const goHome = () => router.push({ name: 'TodoHome' })
 
     const handleSubmit = () => {
-      if (todo.value) store.dispatch(ActionName.PUT_TODO, todo.value)
+      if (todo.value) {
+        const changeItem = { ...todo.value, title: todo.value.title.trim() }
+        if (todo.value.description) changeItem.description = todo.value.description.trim()
+        store.dispatch(ActionName.PUT_TODO, changeItem)
+      }
       goHome()
     }
     // lifeCycle
@@ -49,7 +52,7 @@ export default defineComponent({
       const id = Array.isArray(route.params.id) ? '' : route.params.id
       fetchTodo(id)
     })
-    return { todo, description, handleSubmit, goHome }
+    return { todo, handleSubmit, goHome }
   },
 })
 </script>
