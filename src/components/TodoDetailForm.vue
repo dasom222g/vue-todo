@@ -5,29 +5,25 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, onMounted, computed } from 'vue'
+import { defineComponent, computed } from 'vue'
 export default defineComponent({
   name: 'TodoDetailForm',
   props: {
-    description: {
+    text: {
       type: String,
       required: true,
     },
   },
   emits: {
-    'update:description': (value: string) => {
+    'update:text': (value: string) => {
       if (value !== null) return true
     },
   },
   // emits: ['update:title', 'add-todo'],
   setup(props, { emit }) {
     const message = computed({
-      get: (): string => props.description,
-      set: (value: string) => emit('update:description', value),
-    })
-    //life cycle
-    onMounted(() => {
-      console.log('TodoDetail Render')
+      get: (): string => props.text,
+      set: (value: string) => emit('update:text', value),
     })
     return { message }
   },

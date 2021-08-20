@@ -3,11 +3,8 @@
     <div class="todo">
       <header><h2 class="todo__title">What’s the Plan for Today?</h2></header>
       <template v-if="todo">
-        <TodoForm :isAdd="false" v-model:title="todo.title" />
-        <TodoDetailForm
-          :description="todo.description ? todo.description : ''"
-          v-model:description="todo.description"
-        />
+        <TodoForm :isAdd="false" v-model:text="todo.title" />
+        <TodoDetailForm :text="todo.description ? todo.description : ''" v-model:text="todo.description" />
       </template>
       <div class="button-area">
         <button type="button" class="button-base button-base--cancel" @click="goHome">Cancel</button>

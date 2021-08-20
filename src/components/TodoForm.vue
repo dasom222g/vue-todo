@@ -20,7 +20,7 @@ import { defineComponent, nextTick, onMounted, ref, computed } from 'vue'
 export default defineComponent({
   name: 'TodoForm',
   props: {
-    title: {
+    text: {
       type: String,
       required: true,
     },
@@ -35,20 +35,19 @@ export default defineComponent({
       if (message.length > 0) return true
       else return false
     },
-    'update:title': (value: string) => {
+    'update:text': (value: string) => {
       if (value !== null) return true
     },
   },
-  // emits: ['update:title', 'add-todo'],
   setup(props, { emit }) {
     const myinput = ref<HTMLInputElement | null>(null)
     const message = computed({
-      get: (): string => props.title,
-      set: (value: string) => emit('update:title', value),
+      get: (): string => props.text,
+      set: (value: string) => emit('update:text', value),
     })
     const handleSubmit = () => {
       if (!props.isAdd) return
-      if (/^\s*$/.test(props.title)) {
+      if (/^\s*$/.test(props.text)) {
         // 공백만 입력할 경우
         message.value = ''
         focusInput()
