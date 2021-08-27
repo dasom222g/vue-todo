@@ -3,7 +3,13 @@
     <div class="todo">
       <header><h2 class="todo__title">What’s the Plan for Today?</h2></header>
       <TodoForm :isAdd="true" v-model:text="title" @addTodo="addTodo" />
-      <TodoList v-if="todos.payload" :todos="todos.payload" @completeTodo="completeTodo" @removeTodo="removeTodo" />
+      <div v-if="todos.isLoading">Loading...</div>
+      <TodoList
+        v-else-if="todos.payload"
+        :todos="todos.payload"
+        @completeTodo="completeTodo"
+        @removeTodo="removeTodo"
+      />
     </div>
   </div>
 </template>

@@ -15,7 +15,6 @@ import {
   AugmentedActionContext,
   ByIDType,
   GettersType,
-  header,
   MutationName,
   MutationType,
   NormalType,
@@ -23,6 +22,7 @@ import {
   TodoDataIDType,
 } from './type/type.interface'
 import { StateType } from './type/type.interface'
+import { header, sleep } from './type/utils'
 
 export const key: InjectionKey<VuexStore<State>> = Symbol()
 
@@ -106,6 +106,15 @@ const state = {
 }
 
 const mutations: MutationTree<State> & MutationType = {
+  [MutationName.GET_TODOS](state: State) {
+    state.todos = {
+      ...initialState,
+      isLoading: true,
+      payload: null,
+      selectedItem: null,
+      error: null,
+    }
+  },
   [MutationName.GET_TODOS_SUCCESS](state: State, payload: TodoDataIDType[]) {
     state.todos = {
       ...initialState,
@@ -158,6 +167,8 @@ const mutations: MutationTree<State> & MutationType = {
 
 const actions: ActionTree<State, State> & ActionType = {
   async [ActionName.FETCH_TODOS]({ commit }: AugmentedActionContext): Promise<void> {
+    commit(MutationName.GET_TODOS)
+    await sleep(300)
     try {
       const data = await fetch('/api/todos', header)
       const result = await data.json()

@@ -1,12 +1,6 @@
 import { ActionContext } from 'vuex'
 
 /* eslint-disable no-unused-vars */
-const header = {
-  headers: {
-    'Content-Type': 'application/json',
-    Accept: 'application/json',
-  },
-}
 
 type TodoDataType = {
   title: string
@@ -45,7 +39,7 @@ interface State {
 
 // mutations
 export enum MutationName {
-  // GET_TODOS = 'GET_TODOS',
+  GET_TODOS = 'GET_TODOS',
   GET_TODOS_SUCCESS = 'GET_TODOS_SUCCESS',
   GET_TODOS_ERROR = 'GET_TODOS_ERROR',
   GET_TODO_SUCCESS = 'GET_TODO_SUCCESS',
@@ -59,6 +53,7 @@ export enum MutationName {
 }
 
 export type MutationType<S = State> = {
+  [MutationName.GET_TODOS](state: S): void
   [MutationName.GET_TODOS_SUCCESS](state: S, payload: TodoDataIDType[]): void
   [MutationName.GET_TODOS_ERROR](state: S, error: Error): void
   [MutationName.GET_TODO_SUCCESS](state: S, payload: TodoDataIDType): void
@@ -81,7 +76,7 @@ export enum ActionName {
 }
 
 export type AugmentedActionContext = {
-  commit<K extends keyof MutationType>(key: K, payload: Parameters<MutationType[K]>[1]): ReturnType<MutationType[K]>
+  commit<K extends keyof MutationType>(key: K, payload?: Parameters<MutationType[K]>[1]): ReturnType<MutationType[K]>
 } & Omit<ActionContext<State, State>, 'commit'>
 
 export interface ActionType {
@@ -98,4 +93,4 @@ export type GettersType = {
   todos(state: State): StateType
 }
 
-export { ByIDType, NormalType, TodoDataType, TodoDataIDType, StateType, State, header }
+export { ByIDType, NormalType, TodoDataType, TodoDataIDType, StateType, State }
